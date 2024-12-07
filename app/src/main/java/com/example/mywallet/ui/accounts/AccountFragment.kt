@@ -13,21 +13,8 @@ import com.example.mywallet.databinding.FragmentAccountBinding
 
 class AccountFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = AccountFragment()
-    }
-
-    private val viewModel: AccountViewModel by viewModels()
-
     private var _binding: FragmentAccountBinding? = null
 
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
 
     private val binding get() = _binding!!
 
