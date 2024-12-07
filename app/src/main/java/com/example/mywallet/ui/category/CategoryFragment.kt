@@ -6,26 +6,34 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import com.example.mywallet.R
+import com.example.mywallet.databinding.FragmentCategoryBinding
 
 class CategoryFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = CategoryFragment()
-    }
+    private var _binding: FragmentCategoryBinding? = null
 
-    private val viewModel: CategoryViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_category, container, false)
+
+        val categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+
+        _binding = FragmentCategoryBinding.inflate(inflater,container,false)
+
+        val root: View = binding.root
+
+        val textView: TextView = binding.textCategory
+        categoryViewModel.text.observe(viewLifecycleOwner) {
+            textView.text = it
+        }
+
+        return root
     }
 }

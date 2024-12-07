@@ -25,9 +25,9 @@
 
     <fragment
         android:id="@+id/nav_categories"
-        android:name="com.example.mywallet.ui.slideshow.SlideshowFragment"
+        android:name="com.example.mywallet.ui.category.CategoryFragment"
         android:label="@string/menu_categories"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_category" />
 
     <fragment
         android:id="@+id/nav_accounts"
