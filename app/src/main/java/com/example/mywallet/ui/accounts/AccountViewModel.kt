@@ -10,6 +10,7 @@ class AccountViewModel : ViewModel() {
 
     fun addQuery(query: String) {
         val currentList = searchQueries.value?.toMutableList() ?: mutableListOf()
+        //TODO: delete this log
         Log.i("AccountViewModel", "Adding query: $query")
         currentList.add(query)
         searchQueries.value = currentList
