@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.example.mywallet.R
 import com.example.mywallet.databinding.FragmentAccountBinding
@@ -29,10 +30,22 @@ class AccountFragment : Fragment() {
         _binding = FragmentAccountBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val textView: TextView = binding.textAccounts
-//        accountViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
+
+        val svAccount: SearchView = binding.svAccount
+
+        svAccount.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    accountViewModel.addQuery(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
 
         return root
     }

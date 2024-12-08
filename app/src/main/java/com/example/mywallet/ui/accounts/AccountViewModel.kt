@@ -1,16 +1,17 @@
 package com.example.mywallet.ui.accounts
 
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class AccountViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Account Fragment"
+    val searchQueries = MutableLiveData<List<String>>(mutableListOf())
+
+    fun addQuery(query: String) {
+        val currentList = searchQueries.value?.toMutableList() ?: mutableListOf()
+        Log.i("AccountViewModel", "Adding query: $query")
+        currentList.add(query)
+        searchQueries.value = currentList
     }
-    val text: LiveData<String> = _text
-
-
-    // TODO: Implement the ViewModel
 }
