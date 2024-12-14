@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
@@ -86,9 +89,39 @@ class AccountFragment : Fragment() {
 
         val btnSave: TextView = dialog.findViewById(R.id.btnSave)
 
+        val spCurrency = dialog.findViewById<Spinner>(R.id.spCurrency)
+
+        var optionCurrency = ""
+
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.currencies,
+            android.R.layout.simple_spinner_item
+        )
+
+        spCurrency.adapter = adapter
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedOption = parent?.getItemAtPosition(position).toString()
+                optionCurrency = selectedOption
+                Log.i("AccountFragment", "Selected option: $selectedOption")
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Manejar caso de no seleccionar nada, si aplica
+            }
+        }
+
         btnSave.setOnClickListener {
             val balance = etBalance.text.toString().toDouble()
-            accounts.add(Account(etAccount.text.toString(), balance, "ARS"))
+            accounts.add(Account(etAccount.text.toString(), balance, optionCurrency))
             accountAdapter?.notifyDataSetChanged()
             dialog.dismiss()
         }

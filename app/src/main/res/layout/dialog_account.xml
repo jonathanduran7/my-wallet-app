@@ -6,7 +6,7 @@
     android:padding="16dp"
     android:orientation="vertical"
     android:gravity="center"
-    android:layout_height="200dp">
+    android:layout_height="220dp">
 <EditText
     android:id="@+id/etAccount"
     android:layout_width="match_parent"
@@ -26,6 +26,14 @@
         android:textColorHint="@color/white"
         android:textColor="@color/white"
         />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:id="@+id/spCurrency"
+            android:entries="@array/currencies"
+            />
 
     <Button
         android:id="@+id/btnSave"
