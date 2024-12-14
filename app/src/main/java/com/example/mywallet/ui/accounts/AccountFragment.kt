@@ -1,7 +1,9 @@
 package com.example.mywallet.ui.accounts
 
+import android.app.Dialog
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +56,10 @@ class AccountFragment : Fragment() {
             }
         })
 
+        binding.fabAddAccount.setOnClickListener {
+            showDialog()
+        }
+
         initUI()
 
         return root
@@ -64,5 +70,29 @@ class AccountFragment : Fragment() {
         binding.rvAccount.setHasFixedSize(true)
         binding.rvAccount.adapter = accountAdapter
         binding.rvAccount.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
+
+
+    private fun showDialog(){
+        Log.i("AccountFragment", "Showing dialog")
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_account)
+
+        dialog.setCancelable(true)
+
+        val etAccount: TextView = dialog.findViewById(R.id.etAccount)
+
+        val etBalance: TextView = dialog.findViewById(R.id.etBalance)
+
+        val btnSave: TextView = dialog.findViewById(R.id.btnSave)
+
+        btnSave.setOnClickListener {
+            val balance = etBalance.text.toString().toDouble()
+            accounts.add(Account(etAccount.text.toString(), balance, "ARS"))
+            accountAdapter?.notifyDataSetChanged()
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
