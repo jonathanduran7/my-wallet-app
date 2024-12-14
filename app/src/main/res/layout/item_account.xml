@@ -13,16 +13,29 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:padding="10dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
         <TextView
-            android:gravity="center"
+
             android:id="@+id/tvName"
-            tools:text="prueba"
+            tools:text="Mercado Pago"
+            android:textSize="20sp"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+        android:gravity="start"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            android:id="@+id/tvCurrency"
+            tools:text="USD"
             android:textSize="20sp"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="end"
             />
     </LinearLayout>
 

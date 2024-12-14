@@ -8,8 +8,10 @@ import com.example.mywallet.R
 class AccountViewHolder(view: View): RecyclerView.ViewHolder(view){
 
     private val tvName: TextView = view.findViewById(R.id.tvName)
+    private val tvCurrency: TextView = view.findViewById(R.id.tvCurrency)
 
     fun bind(account: Account){
         tvName.text = account.name
+        tvCurrency.text = account.currency
     }
 }
