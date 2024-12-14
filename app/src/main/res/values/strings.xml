@@ -13,6 +13,11 @@
     <string name="menu_categories">Categories</string>
     <string name="menu_accounts">Accounts</string>
 
+    <string name="name_account">Nombre Cuenta</string>
+    <string name="initial_balance">Saldo Inicial</string>
+
+    <string name="fab_add_account">Agregar Cuenta</string>
+
     <string-array name="currencies">
         <item>ARS</item>
         <item>USD</item>

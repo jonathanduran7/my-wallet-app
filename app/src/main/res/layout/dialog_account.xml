@@ -11,7 +11,7 @@
     android:id="@+id/etAccount"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="Agregar cuenta"
+    android:hint="@string/name_account"
     android:textColorHint="@color/white"
     android:textColor="@color/white"
     />
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Saldo Inicial"
+        android:hint="@string/initial_balance"
         android:textColorHint="@color/white"
         android:textColor="@color/white"
         />
@@ -40,7 +40,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Guardar"
+        android:text="@string/fab_add_account"
         android:gravity="center_horizontal"
         />
 </LinearLayout>
