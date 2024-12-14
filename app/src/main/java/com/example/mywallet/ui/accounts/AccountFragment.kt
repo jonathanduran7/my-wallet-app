@@ -125,9 +125,12 @@ class AccountFragment : Fragment() {
             if (balanceText.isNotEmpty()) {
                 balance = balanceText.toDouble()
             }
+            if(etAccount.text.toString().isNotEmpty()){
             accounts.add(Account(etAccount.text.toString(), balance , optionCurrency))
             accountAdapter?.notifyDataSetChanged()
             dialog.dismiss()
+            }
+
         }
 
         dialog.show()
