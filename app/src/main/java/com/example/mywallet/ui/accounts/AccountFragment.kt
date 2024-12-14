@@ -121,7 +121,7 @@ class AccountFragment : Fragment() {
 
         btnSave.setOnClickListener {
             val balance = etBalance.text.toString().toDouble()
-            accounts.add(Account(etAccount.text.toString(), balance, optionCurrency))
+            accounts.add(Account(etAccount.text.toString(), balance , optionCurrency))
             accountAdapter?.notifyDataSetChanged()
             dialog.dismiss()
         }
