@@ -1,6 +1,7 @@
 package com.example.mywallet.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,11 +33,19 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+        setListener()
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setListener(){
+        binding.btnHome.setOnClickListener{
+            binding.textHome.text = "Hola"
+            Log.i("HomeFragment", "Button clicked")
+        }
     }
 }
