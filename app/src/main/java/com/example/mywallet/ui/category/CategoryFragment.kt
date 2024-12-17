@@ -1,5 +1,6 @@
 package com.example.mywallet.ui.category
 
+import android.app.Dialog
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -42,6 +43,10 @@ class CategoryFragment : Fragment() {
 
         initUI()
 
+        binding.fabAddCategory.setOnClickListener {
+            showDialog()
+        }
+
         return root
     }
 
@@ -50,6 +55,27 @@ class CategoryFragment : Fragment() {
         binding.rvCategory.setHasFixedSize(true)
         binding.rvCategory.adapter = categoryAdapter
         binding.rvCategory.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
 
+    private fun showDialog(){
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_category)
+
+        dialog.setCancelable(true)
+
+        val etAccount: TextView = dialog.findViewById(R.id.etCategory)
+
+        val btnSave: TextView = dialog.findViewById(R.id.btnSaveCategory)
+
+        btnSave.setOnClickListener {
+            if (etAccount.text.toString().isNotEmpty()) {
+                categories.add(Category(etAccount.text.toString()))
+                categoryAdapter?.notifyDataSetChanged()
+                dialog.dismiss()
+            }
+
+        }
+
+        dialog.show()
     }
 }

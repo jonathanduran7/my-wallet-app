@@ -18,6 +18,10 @@
 
     <string name="fab_add_account">Agregar Cuenta</string>
 
+    <string name="dialog_category">Inserte nombre</string>
+
+    <string name="fab_add_category">Agregar Categoria</string>
+
     <string-array name="currencies">
         <item>ARS</item>
         <item>USD</item>
