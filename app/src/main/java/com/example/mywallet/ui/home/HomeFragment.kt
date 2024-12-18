@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.mywallet.databinding.FragmentHomeBinding
+import com.example.mywallet.ui.components.CustomButton
 
 class HomeFragment : Fragment() {
 
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
             textView.text = it
         }
         setListener()
+        initUI()
         return root
     }
 
@@ -47,5 +49,18 @@ class HomeFragment : Fragment() {
             binding.textHome.text = "Hola"
             Log.i("HomeFragment", "Button clicked")
         }
+    }
+
+    private fun initUI(){
+        val myCustomButton = CustomButton(binding.root.context).apply {
+            setCustomStyle(
+                text = "Desde el fragment",
+                textSize = 16f,
+                backgroundColor = android.R.color.black,
+                textColor = android.R.color.white
+            )
+        }
+
+        binding.myHomeFragment.addView(myCustomButton)
     }
 }

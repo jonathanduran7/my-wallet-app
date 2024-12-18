@@ -20,6 +20,7 @@ class CategoryFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var categoryAdapter: CategoryAdapter? = null
+    private lateinit var viewModel: CategoryViewModel
 
     private var categories = mutableListOf<Category>(
         Category("Compras"),
@@ -33,7 +34,7 @@ class CategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
 
         _binding = FragmentCategoryBinding.inflate(inflater,container,false)
 
@@ -42,6 +43,12 @@ class CategoryFragment : Fragment() {
       //TODO: implement search view
 
         initUI()
+
+        viewModel.getCategories().observe(viewLifecycleOwner) {
+            categories.clear()
+            categories.addAll(it)
+            categoryAdapter?.notifyDataSetChanged()
+        }
 
         binding.fabAddCategory.setOnClickListener {
             showDialog()
@@ -69,11 +76,11 @@ class CategoryFragment : Fragment() {
 
         btnSave.setOnClickListener {
             if (etAccount.text.toString().isNotEmpty()) {
-                categories.add(Category(etAccount.text.toString()))
+//                categories.add(Category(etAccount.text.toString()))
+                viewModel.addCategory(Category(etAccount.text.toString()))
                 categoryAdapter?.notifyDataSetChanged()
                 dialog.dismiss()
             }
-
         }
 
         dialog.show()
