@@ -1,12 +1,22 @@
 package com.example.mywallet.ui.accounts
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class AccountViewModel : ViewModel() {
 
     val searchQueries = MutableLiveData<List<String>>(mutableListOf())
+    private val accounts = MutableLiveData<List<Account>>()
+
+    init {
+        accounts.value = listOf(
+            Account("Cuenta 1", 1000.0, "EUR"),
+            Account("Cuenta 2", 1000.0, "EUR"),
+            Account("Cuenta 3", 1000.0, "EUR"),
+        )
+    }
 
     fun addQuery(query: String) {
         val currentList = searchQueries.value?.toMutableList() ?: mutableListOf()
@@ -14,5 +24,15 @@ class AccountViewModel : ViewModel() {
         Log.i("AccountViewModel", "Adding query: $query")
         currentList.add(query)
         searchQueries.value = currentList
+    }
+
+    fun getAccounts(): LiveData<List<Account>> {
+        return accounts
+    }
+
+    fun addAccount(account: Account) {
+        val currentList = accounts.value?.toMutableList() ?: mutableListOf()
+        currentList.add(account)
+        accounts.value = currentList
     }
 }
