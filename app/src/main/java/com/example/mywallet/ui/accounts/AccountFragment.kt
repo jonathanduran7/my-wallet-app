@@ -25,12 +25,9 @@ class AccountFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var accountAdapter: AccountAdapter? = null
+    private lateinit var viewModel: AccountViewModel
 
-    private var accounts = mutableListOf<Account>(
-        Account("Mercado Pago", 100.0, "ARS"),
-        Account("Banco Galicia", 200.0, "ARS"),
-        Account("Efectivo", 300.0, "ARS"),
-    )
+    private var accounts = mutableListOf<Account>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +40,7 @@ class AccountFragment : Fragment() {
         _binding = FragmentAccountBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
+        viewModel = ViewModelProvider(this).get(AccountViewModel::class.java)
         val svAccount: SearchView = binding.svAccount
 
         svAccount.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
@@ -61,6 +58,12 @@ class AccountFragment : Fragment() {
 
         binding.fabAddAccount.setOnClickListener {
             showDialog()
+        }
+
+        viewModel.getAccounts().observe(viewLifecycleOwner) {
+            accounts.clear()
+            accounts.addAll(it)
+            accountAdapter?.notifyDataSetChanged()
         }
 
         initUI()
@@ -126,8 +129,9 @@ class AccountFragment : Fragment() {
                 balance = balanceText.toDouble()
             }
             if(etAccount.text.toString().isNotEmpty()){
-            accounts.add(Account(etAccount.text.toString(), balance , optionCurrency))
-            accountAdapter?.notifyDataSetChanged()
+            //accounts.add(Account(etAccount.text.toString(), balance , optionCurrency))
+            viewModel.addAccount(Account(etAccount.text.toString(), balance , optionCurrency))
+                accountAdapter?.notifyDataSetChanged()
             dialog.dismiss()
             }
 

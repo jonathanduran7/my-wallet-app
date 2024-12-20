@@ -12,9 +12,9 @@ class AccountViewModel : ViewModel() {
 
     init {
         accounts.value = listOf(
-            Account("Cuenta 1", 1000.0, "EUR"),
-            Account("Cuenta 2", 1000.0, "EUR"),
-            Account("Cuenta 3", 1000.0, "EUR"),
+            Account("Mercado Pago", 100.0, "ARS"),
+            Account("Banco Galicia", 200.0, "ARS"),
+            Account("Efectivo", 300.0, "ARS"),
         )
     }
 
