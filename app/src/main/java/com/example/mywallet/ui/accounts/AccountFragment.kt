@@ -1,142 +1,148 @@
 package com.example.mywallet.ui.accounts
 
-import android.app.Dialog
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.TextView
-import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mywallet.R
+import com.example.mywallet.databinding.DialogAccountBinding
 import com.example.mywallet.databinding.FragmentAccountBinding
 
 class AccountFragment : Fragment() {
 
     private var _binding: FragmentAccountBinding? = null
-
     private val binding get() = _binding!!
 
-    private var accountAdapter: AccountAdapter? = null
-    private lateinit var viewModel: AccountViewModel
-
-    private var accounts = mutableListOf<Account>()
+    private val viewModel: AccountViewModel by viewModels()
+    private lateinit var accountAdapter: AccountAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        val accountViewModel = ViewModelProvider(this).get(AccountViewModel::class.java)
-
         _binding = FragmentAccountBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        viewModel = ViewModelProvider(this).get(AccountViewModel::class.java)
-        val svAccount: SearchView = binding.svAccount
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        svAccount.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+        setupRecyclerView()
+        setupObservers()
+        setupSearchView()
+        setupFab()
+    }
+
+    private fun setupRecyclerView() {
+        accountAdapter = AccountAdapter(
+            listOf(
+                Account("Mercado Pago2", 100.0, "ARS"),
+                Account("Banco Galicia", 200.0, "ARS"),
+                Account("Efectivo", 300.0, "ARS")
+            )
+        )
+        binding.rvAccount.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = accountAdapter
+            setHasFixedSize(true)
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.accounts.observe(viewLifecycleOwner, Observer { accounts ->
+            accountAdapter = AccountAdapter(accounts)
+            binding.rvAccount.adapter = accountAdapter
+            binding.rvAccount.adapter?.notifyDataSetChanged()
+        })
+    }
+
+    private fun setupSearchView() {
+        binding.svAccount.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
-                    accountViewModel.addQuery(query)
-                }
+                query?.let { viewModel.addQuery(it) }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                // Puedes implementar filtrado en tiempo real aquí si lo deseas
                 return true
             }
         })
+    }
 
+    private fun setupFab() {
         binding.fabAddAccount.setOnClickListener {
-            showDialog()
+            showAddAccountDialog()
         }
-
-        viewModel.getAccounts().observe(viewLifecycleOwner) {
-            accounts.clear()
-            accounts.addAll(it)
-            accountAdapter?.notifyDataSetChanged()
-        }
-
-        initUI()
-
-        return root
     }
 
-    private fun initUI(){
-        accountAdapter = AccountAdapter(accounts)
-        binding.rvAccount.setHasFixedSize(true)
-        binding.rvAccount.adapter = accountAdapter
-        binding.rvAccount.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-    }
-
-
-    private fun showDialog(){
-        Log.i("AccountFragment", "Showing dialog")
-        val dialog = Dialog(requireContext())
-        dialog.setContentView(R.layout.dialog_account)
-
-        dialog.setCancelable(true)
-
-        val etAccount: TextView = dialog.findViewById(R.id.etAccount)
-
-        val etBalance: TextView = dialog.findViewById(R.id.etBalance)
-
-        val btnSave: TextView = dialog.findViewById(R.id.btnSave)
-
-        val spCurrency = dialog.findViewById<Spinner>(R.id.spCurrency)
-
-        var optionCurrency = ""
-
-        val adapter = ArrayAdapter.createFromResource(
+    private fun showAddAccountDialog() {
+        val dialogBinding = DialogAccountBinding.inflate(layoutInflater)
+        val currencyAdapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.currencies,
             android.R.layout.simple_spinner_item
-        )
-
-        spCurrency.adapter = adapter
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        spCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedOption = parent?.getItemAtPosition(position).toString()
-                optionCurrency = selectedOption
-                Log.i("AccountFragment", "Selected option: $selectedOption")
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Manejar caso de no seleccionar nada, si aplica
-            }
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
 
-        btnSave.setOnClickListener {
-            var balance = 0.0
-            val balanceText = etBalance.text.toString()
-            if (balanceText.isNotEmpty()) {
-                balance = balanceText.toDouble()
-            }
-            if(etAccount.text.toString().isNotEmpty()){
-            //accounts.add(Account(etAccount.text.toString(), balance , optionCurrency))
-            viewModel.addAccount(Account(etAccount.text.toString(), balance , optionCurrency))
-                accountAdapter?.notifyDataSetChanged()
-            dialog.dismiss()
-            }
+        dialogBinding.spCurrency.adapter = currencyAdapter
 
+        var selectedCurrency = currencyAdapter.getItem(0) ?: ""
+
+        dialogBinding.spCurrency.setOnItemSelectedListener { position ->
+            selectedCurrency = currencyAdapter.getItem(position) ?: ""
         }
 
-        dialog.show()
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.add_account))
+            .setView(dialogBinding.root)
+            .setPositiveButton(getString(R.string.save)) { dialog, _ ->
+                val accountName = dialogBinding.etAccount.text.toString().trim()
+                val balanceText = dialogBinding.etBalance.text.toString().trim()
+                val balance = balanceText.toDoubleOrNull() ?: 0.0
+
+                if (accountName.isNotEmpty()) {
+                    val newAccount = Account(accountName, balance, selectedCurrency.toString())
+                    viewModel.addAccount(newAccount)
+                    accountAdapter.notifyDataSetChanged()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .create()
+            .show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}
+
+// Extensión para manejar el listener del Spinner de manera más concisa
+fun Spinner.setOnItemSelectedListener(onItemSelected: (Int) -> Unit) {
+    this.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: android.widget.AdapterView<*>?,
+            view: View?,
+            position: Int,
+            id: Long
+        ) {
+            onItemSelected(position)
+        }
+
+        override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
     }
 }

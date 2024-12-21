@@ -1,38 +1,35 @@
 package com.example.mywallet.ui.accounts
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
+
 class AccountViewModel : ViewModel() {
 
-    val searchQueries = MutableLiveData<List<String>>(mutableListOf())
-    private val accounts = MutableLiveData<List<Account>>()
+    private val _searchQueries = MutableLiveData<List<String>>(emptyList())
+    val searchQueries: LiveData<List<String>> get() = _searchQueries
 
-    init {
-        accounts.value = listOf(
+    private val _accounts = MutableLiveData<List<Account>>(
+        listOf(
             Account("Mercado Pago", 100.0, "ARS"),
             Account("Banco Galicia", 200.0, "ARS"),
-            Account("Efectivo", 300.0, "ARS"),
+            Account("Efectivo", 300.0, "ARS")
         )
-    }
+    )
+    val accounts: LiveData<List<Account>> get() = _accounts
 
     fun addQuery(query: String) {
-        val currentList = searchQueries.value?.toMutableList() ?: mutableListOf()
-        //TODO: delete this log
-        Log.i("AccountViewModel", "Adding query: $query")
-        currentList.add(query)
-        searchQueries.value = currentList
-    }
-
-    fun getAccounts(): LiveData<List<Account>> {
-        return accounts
+        val updatedQueries = _searchQueries.value.orEmpty().toMutableList().apply {
+            add(query)
+        }
+        _searchQueries.value = updatedQueries
     }
 
     fun addAccount(account: Account) {
-        val currentList = accounts.value?.toMutableList() ?: mutableListOf()
-        currentList.add(account)
-        accounts.value = currentList
+        val updatedAccounts = _accounts.value.orEmpty().toMutableList().apply {
+            add(account)
+        }
+        _accounts.value = updatedAccounts
     }
 }

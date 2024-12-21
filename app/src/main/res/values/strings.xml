@@ -27,4 +27,8 @@
         <item>USD</item>
         <item>EUR</item>
     </string-array>
+
+    <string name="add_account">Agregar cuenta</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
 </resources>
