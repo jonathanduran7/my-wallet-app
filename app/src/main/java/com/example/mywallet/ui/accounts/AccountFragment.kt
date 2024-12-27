@@ -43,13 +43,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        accountAdapter = AccountAdapter(
-            listOf(
-                Account("Mercado Pago2", 100.0, "ARS"),
-                Account("Banco Galicia", 200.0, "ARS"),
-                Account("Efectivo", 300.0, "ARS")
-            )
-        )
+        accountAdapter = AccountAdapter()
         binding.rvAccount.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = accountAdapter
@@ -59,7 +53,8 @@ class AccountFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.accounts.observe(viewLifecycleOwner, Observer { accounts ->
-            accountAdapter.updateData(accounts)
+//            accountAdapter.updateData(accounts)
+            accountAdapter.submitList(accounts)
         })
     }
 
