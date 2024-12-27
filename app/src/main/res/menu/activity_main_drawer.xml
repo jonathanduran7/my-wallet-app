@@ -18,5 +18,10 @@
             android:id="@+id/nav_categories"
             android:icon="@drawable/ic_menu_category"
             android:title="@string/menu_categories" />
+
+        <item
+            android:id="@+id/nav_movements"
+            android:icon="@drawable/ic_menu_category"
+            android:title="@string/menu_movements" />
     </group>
 </menu>
