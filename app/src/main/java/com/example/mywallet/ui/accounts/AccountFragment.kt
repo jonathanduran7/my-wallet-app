@@ -59,9 +59,7 @@ class AccountFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.accounts.observe(viewLifecycleOwner, Observer { accounts ->
-            accountAdapter = AccountAdapter(accounts)
-            binding.rvAccount.adapter = accountAdapter
-            binding.rvAccount.adapter?.notifyDataSetChanged()
+            accountAdapter.updateData(accounts)
         })
     }
 
