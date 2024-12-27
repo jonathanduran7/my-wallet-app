@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mywallet.R
@@ -44,11 +45,9 @@ class CategoryFragment : Fragment() {
 
         initUI()
 
-        viewModel.getCategories().observe(viewLifecycleOwner) {
-            categories.clear()
-            categories.addAll(it)
-            categoryAdapter?.notifyDataSetChanged()
-        }
+        viewModel.categories.observe(viewLifecycleOwner, Observer {
+            categoryAdapter?.submitList(it)
+        })
 
         binding.fabAddCategory.setOnClickListener {
             showDialog()
@@ -58,7 +57,7 @@ class CategoryFragment : Fragment() {
     }
 
     private fun initUI(){
-        categoryAdapter = CategoryAdapter(categories)
+        categoryAdapter = CategoryAdapter()
         binding.rvCategory.setHasFixedSize(true)
         binding.rvCategory.adapter = categoryAdapter
         binding.rvCategory.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

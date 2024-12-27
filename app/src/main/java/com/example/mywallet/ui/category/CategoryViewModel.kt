@@ -6,23 +6,20 @@ import androidx.lifecycle.ViewModel
 
 class CategoryViewModel : ViewModel() {
 
-    private val categories = MutableLiveData<List<Category>>()
-
-    init {
-        categories.value = listOf(
+    private val _categories = MutableLiveData<List<Category>>(
+        listOf(
             Category("Compras"),
             Category("Auto"),
             Category("Otros"),
         )
-    }
+    )
+    val categories: LiveData<List<Category>> get() = _categories
 
-    fun getCategories(): LiveData<List<Category>> {
-        return categories
-    }
+
 
     fun addCategory(category: Category) {
         val currentList = categories.value?.toMutableList() ?: mutableListOf()
         currentList.add(category)
-        categories.value = currentList
+        _categories.value = currentList
     }
 }
