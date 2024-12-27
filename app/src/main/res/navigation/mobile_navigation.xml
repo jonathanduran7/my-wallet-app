@@ -34,4 +34,10 @@
         android:name="com.example.mywallet.ui.accounts.AccountFragment"
         android:label="@string/menu_accounts"
         tools:layout="@layout/fragment_account" />
+
+    <fragment
+        android:id="@+id/nav_movements"
+        android:name="com.example.mywallet.ui.movements.MovementFragment"
+        android:label="@string/menu_movements"
+        tools:layout="@layout/fragment_movement" />
 </navigation>
